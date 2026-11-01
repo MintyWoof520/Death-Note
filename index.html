@@ -1,1 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>好奇贩卖机 · 有趣事物研究所</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #f8f0e6 0%, #fff4e8 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            color: #2d2a24;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 漂浮的装饰气泡 */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 200, 150, 0.25);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 12s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        .bubble:nth-child(1) {
+            width: 160px;
+            height: 160px;
+            top: 5%;
+            left: -3%;
+            animation-duration: 18s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 90px;
+            height: 90px;
+            bottom: 8%;
+            right: 2%;
+            animation-duration: 14s;
+            animation-delay: 3s;
+            background: rgba(200, 220, 255, 0.3);
+        }
+
+        .bubble:nth-child(3) {
+            width: 220px;
+            height: 220px;
+            bottom: -10%;
+            left: 20%;
+            animation-duration: 22s;
+            animation-delay: 1s;
+            background: rgba(230, 200, 255, 0.2);
+        }
+
+        .bubble:nth-child(4) {
+            width: 70px;
+            height: 70px;
+            top: 20%;
+            right: 15%;
+            animation-duration: 10s;
+            background: rgba(255, 230, 150, 0.4);
+            animation-delay: 0s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -30px) scale(1.05); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 2.8rem 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), inset 0 1px 3px rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 245, 235, 0.8);
+            position: relative;
+            z-index: 10;
+            transition: transform 0.2s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.005);
+        }
+
+        /* 主标题 */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #4b3b2b, #956b4a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero h1 span {
+            background: #f3d9c2;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 0.3rem 1rem;
+            color: #5b3f2b;
+            letter-spacing: 0.3px;
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
+        }
+
+        .subhead {
+            font-size: 1.15rem;
+            color: #6d5d4e;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .subhead i {
+            font-style: normal;
+            background: #fff1e6;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px solid #e9d9cb;
+            color: #7a5e48;
+        }
+
+        /* 卡片网格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.6rem;
+            margin: 2.2rem 0 1.2rem;
+        }
+
+        .card {
+            background: #ffffffdb;
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 1.8rem 1.6rem 1.8rem 1.6rem;
+            box-shadow: 0 12px 24px -8px rgba(80, 60, 40, 0.12);
+            border: 1px solid #f1e5da;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #ffc49b, #f7aa7a, #f7d5b5);
+            opacity: 0.7;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 36px -12px rgba(120, 80, 50, 0.25);
+            background: #fffffff2;
+            border-color: #e7d3c2;
+        }
+
+        .emoji-big {
+            font-size: 2.6rem;
+            margin-bottom: 0.7rem;
+            line-height: 1;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.05));
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.3px;
+            color: #3e2e20;
+        }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #5b4b3c;
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+
+        .fact-tag {
+            display: inline-block;
+            background: #ffefe3;
+            border-radius: 40px;
+            padding: 0.35rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #986b4a;
+            border: 1px solid #f1dbcb;
+            align-self: flex-start;
+            letter-spacing: 0.2px;
+        }
+
+        /* 随机趣闻生成区 */
+        .surprise-section {
+            background: #e6d9cfb3;
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 1.8rem 2rem;
+            margin: 2rem 0 0.8rem;
+            border: 1px solid #fff7f0;
+            box-shadow: inset 0 1px 6px rgba(255, 255, 255, 0.7), 0 8px 20px -8px rgba(100, 70, 40, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .surprise-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4f3a29;
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.2px;
+        }
+
+        .surprise-text {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #3d2b1b;
+            line-height: 1.5;
+            min-height: 3.5rem;
+            padding: 0.4rem 0;
+            transition: opacity 0.25s ease;
+            font-style: italic;
+            max-width: 650px;
+            margin-bottom: 1.4rem;
+            background: #fffaf5b0;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.02);
+            border: 1px dashed #dbbfa8;
+        }
+
+        .btn {
+            background: #5b3f2b;
+            border: none;
+            color: #fff7ed;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.85rem 2.2rem;
+            border-radius: 100px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 18px -8px rgba(60, 40, 20, 0.4);
+            letter-spacing: 0.3px;
+            border: 1px solid #7a5a40;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background: #6e4e36;
+            transform: scale(1.02);
+            box-shadow: 0 14px 22px -8px #3f2b1c;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            background: #4a3423;
+        }
+
+        .btn span {
+            font-size: 1.2rem;
+        }
+
+        /* footer */
+        .footer-note {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #9a8878;
+            margin-top: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .footer-note .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #b9a28e;
+            display: inline-block;
+        }
+
+        /* 响应式 */
+        @media (max-width: 650px) {
+            .container {
+                padding: 1.8rem 1.2rem;
+                border-radius: 32px;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+                gap: 6px;
+            }
+            .hero h1 span {
+                font-size: 0.85rem;
+                padding: 0.2rem 0.8rem;
+            }
+            .subhead {
+                font-size: 1rem;
+            }
+            .surprise-text {
+                font-size: 1.1rem;
+                padding: 0.6rem 1rem;
+            }
+            .btn {
+                padding: 0.7rem 1.6rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.9rem;
+            }
+            .card {
+                padding: 1.4rem;
+            }
+            .emoji-big {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 漂浮气泡装饰 -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="container">
+        <!-- 主标题区 -->
+        <div class="hero">
+            <h1>
+                🧠 好奇贩卖机 
+                <span>持续加载中</span>
+            </h1>
+            <div class="subhead">
+                <i>#每日冷知识</i>
+                <i>#无用但有趣</i>
+                <i>#脑洞燃料</i>
+            </div>
+        </div>
+
+        <!-- 卡片网格：三个趣味小知识/事实 -->
+        <div class="grid">
+            <!-- 卡片 1: 关于香蕉 -->
+            <div class="card">
+                <div class="emoji-big">🍌</div>
+                <h2>香蕉的微弱辐射</h2>
+                <p>香蕉富含钾，而钾-40具有放射性。不过别担心，吃一根香蕉受到的辐射剂量约为 0.1 微西弗 —— 大约等于坐飞机 1 分钟受到的辐射。想靠香蕉“变异”？你得一次性吃掉几千万根。</p>
+                <div class="fact-tag">🚀 冷知识等级 ★★★★☆</div>
+            </div>
+
+            <!-- 卡片 2: 关于考拉指纹 -->
+            <div class="card">
+                <div class="emoji-big">🐨</div>
+                <h2>考拉的指纹</h2>
+                <p>考拉是除了灵长类之外，极少数拥有指纹的动物。而且它们的指纹和人类非常相似——在电子显微镜下，连专家都很难区分。这是趋同演化的奇妙例子。</p>
+                <div class="fact-tag">🔍 冷知识等级 ★★★★☆</div>
+            </div>
+
+            <!-- 卡片 3: 关于蜂蜜 -->
+            <div class="card">
+                <div class="emoji-big">🍯</div>
+                <h2>蜂蜜永不过期</h2>
+                <p>考古学家曾在古埃及墓葬中发现3000多年前的蜂蜜，依然可以食用。因为蜂蜜水分低、酸性强，且含有天然过氧化氢，细菌很难生存。真正的“传家宝”食物。</p>
+                <div class="fact-tag">⏳ 冷知识等级 ★★★★★</div>
+            </div>
+        </div>
+
+        <!-- 随机趣闻互动区 -->
+        <div class="surprise-section">
+            <div class="surprise-title">
+                <span>✨</span> 随机放送一条趣味事实 <span>✨</span>
+            </div>
+            <div class="surprise-text" id="factDisplay">
+                点击下面的按钮，随机打捞一条无用但有趣的冷知识。
+            </div>
+            <button class="btn" id="randomBtn">
+                <span>🎲</span> 摇一个冷知识
+            </button>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer-note">
+            <span>静态网页 · 好奇心研究所</span>
+            <span class="dot"></span>
+            <span>灵感来自奇奇怪怪的知识</span>
+            <span class="dot"></span>
+            <span>© 2025</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // 趣味事实库
+            const funFacts = [
+                "🐘 大象是唯一不能跳的哺乳动物 —— 它们的骨骼结构不支持跳跃，但会游泳哦。",
+                "🌌 太空中的星星其实不会‘眨眼’，我们看到的闪烁是地球大气层折射造成的。",
+                "🦉 猫头鹰的眼球是柱状的，不能转动，但它的脖子可以旋转 270 度。",
+                "🍅 番茄酱在19世纪30年代曾被当作药品出售，用来治疗消化不良和腹泻。",
+                "🐧 阿德利企鹅会向心仪的异性赠送一块最漂亮的鹅卵石来‘求婚’。",
+                "📱 第一部iPhone于2007年发布，当时它甚至没有复制粘贴功能。",
+                "🌧️ 雨滴并不是泪滴形状的，实际上它们看起来更像汉堡面包——底部扁平，顶部圆形。",
+                "🦒 长颈鹿的舌头是深紫色的，可以长达50厘米，用来卷取树叶。",
+                "🎵 耳虫（不自觉在脑中循环的旋律）平均会持续15分钟到半小时。",
+                "🐌 蜗牛有两万多颗牙齿，排列在舌头上（叫做齿舌），但它们不能咀嚼，只能磨碎食物。",
+                "☕ 咖啡其实是一种水果的种子，而‘咖啡樱桃’最初是被当作食物食用的。",
+                "🌙 月球正在以每年约3.8厘米的速度远离地球。",
+                "🦩 火烈鸟的粉色来自于它们食物中的类胡萝卜素，如果换一种饮食，它们会变白。",
+                "🧊 冰岛没有蚊子 —— 它是世界上少数没有蚊子的国家之一。",
+                "🍫 巧克力对狗有毒是因为可可碱，而人类代谢可可碱的速度比狗快得多。",
+                "⚡ 闪电的温度比太阳表面温度还要高大约5倍。",
+                "🐙 章鱼有三颗心脏，血液是蓝色的。",
+                "🌵 仙人掌的刺其实是变态的叶子，用来减少水分蒸发。",
+                "🎈 世界上第一个气球是猪膀胱做的，由阿兹特克人制作。",
+                "📖 牛津大学出版社比阿兹特克帝国还要古老。"
+            ];
+
+            const factDisplay = document.getElementById('factDisplay');
+            const randomBtn = document.getElementById('randomBtn');
+            let currentFactIndex = -1;
+
+            // 显示随机事实
+            function showRandomFact() {
+                let newIndex;
+                // 避免连续出现同一个事实
+                do {
+                    newIndex = Math.floor(Math.random() * funFacts.length);
+                } while (newIndex === currentFactIndex && funFacts.length > 1);
+                
+                currentFactIndex = newIndex;
+                
+                // 淡入淡出效果
+                factDisplay.style.opacity = '0.3';
+                setTimeout(() => {
+                    factDisplay.textContent = funFacts[newIndex];
+                    factDisplay.style.opacity = '1';
+                }, 120);
+            }
+
+            // 绑定按钮点击事件
+            randomBtn.addEventListener('click', showRandomFact);
+
+            // 页面加载时自动显示第一条事实（可选）
+            // 但是为了保留初始文案，等用户点击后再开始。也可以预显示一条。
+            // 为了让页面更有趣，初始化时随机显示一条。
+            window.addEventListener('load', () => {
+                // 稍微微调一下：点击前显示第一条欢迎语，不自动换，让用户有点击的欲望。
+                // 不过我们也可以预加载第一条，但不重复。
+                // 让第一个显示稍微特别一点：可以先保持原有文本，用户点击后再变化。
+                // 但想了一下，还是保持原样吧，让按钮更有存在感。
+                // 不自动触发 showRandomFact，保留占位文本。
+            });
+
+            // 额外小彩蛋：双击卡片标题可以弹出一个小提示？
+            // 不需要复杂功能，保持简洁。
+        })();
+    </script>
+</body>
+</html>
